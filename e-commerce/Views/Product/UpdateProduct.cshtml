@@ -1,0 +1,30 @@
+﻿@model Data.DTOs.ProductDTO
+@{
+    Layout = "_Layout";
+}
+<div style="width:50%">
+    <h2> Update Product </h2>
+    <a asp-action="Index" asp-controller="Product" class="btn btn-primary">Back</a>
+    <form asp-action="UpdateProduct" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+       
+
+        <div class="my-2">
+            <label>Product*</label>
+            <input type="text" class="form-control" asp-for="Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+       
+
+        <div class="my-2">
+            <label>Price*</label>
+            <input type="number" class="form-control" asp-for="Price" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="my-2">
+            <button type="submit" class="btn btn-info">Update</button>
+        </div>
+    </form>
+</div>
