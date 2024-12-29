@@ -13,7 +13,6 @@
                 <th>Email</th>
                 <th>MobileNo</th>
                 <th>Address</th>
-                <th>PaymentStatus</th>
                 <th>OrderStatus</th>
                 <th>Actions</th>
 
@@ -26,14 +25,13 @@
                     <td>@order.MobileNumber</td>
                     <td>@order.Email</td>
                     <td>@order.Address</td>
-                    <td>@order.PaymentMethod | @(order.IsPaid ? "Paid" : "Not Paid")</td>
                     <td>@order.OrderStatus.StatusName</td>
                     <td>
                         <button type="button" data-bs-toggle="modal" data-bs-target="#modal-@order.Id" class="btn btn-primary">
                             Order-Detail
                         </button>
                         <a asp-action="UpdateOrderStatus" asp-route-orderId="@order.Id" class="btn btn-info">Change Order Status</a>
-                        <a asp-action="TogglePaymentStatus" asp-route-orderId="@order.Id" class="btn btn-info">Toggle Payment Status</a>
+                      @*   <a asp-action="TogglePaymentStatus" asp-route-orderId="@order.Id" class="btn btn-info">Toggle Payment Status</a> *@
 
                    @* appending modal div here *@
                    @* Make sure to put this partial tag inside this td block, otherwise it can cause layout related problem*@

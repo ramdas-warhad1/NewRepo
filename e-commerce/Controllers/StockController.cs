@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace e_commerce.Controllers
 {
-   // [Authorize(Roles=nameof(Roles.Admin))]
+    [Authorize(Roles = "Admin")]
     public class StockController : Controller
     {
         private readonly IStockRepository _stockRepo;

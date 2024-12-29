@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using ProductShoppingCartMvcUI.Repositories;
 using Data.DTOs;
 using Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace e_commerce.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private readonly IProductRepository _prodkRepo;
@@ -47,7 +49,7 @@ namespace e_commerce.Controllers
                 };
                 await _prodkRepo.AddProduct(product);
                 TempData["successMessage"] = "Product is added successfully";
-                return RedirectToAction(nameof(AddProduct));
+                return RedirectToAction(nameof(Index));
             }
             catch (InvalidOperationException ex)
             {

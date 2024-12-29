@@ -1,4 +1,6 @@
-﻿using Data.DTOs;
+﻿using System.Security.Claims;
+using Data;
+using Data.DTOs;
 using Data.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +18,11 @@ namespace e_commerce.Controllers
         }
         public async Task<IActionResult> AddItem(int productId, int qty = 1, int redirect = 0)
         {
-            var cartCount = await _cartRepo.AddItem(productId, qty);
+
+          
+             
+
+            var cartCount = await _cartRepo.AddItem(productId, qty, User.Identity.Name);
             if (redirect == 0)
                 return Ok(cartCount);
             return RedirectToAction("GetUserCart");
@@ -24,12 +30,12 @@ namespace e_commerce.Controllers
 
         public async Task<IActionResult> RemoveItem(int productId)
         {
-            var cartCount = await _cartRepo.RemoveItem(productId);
+            var cartCount = await _cartRepo.RemoveItem(productId, User.Identity.Name);
             return RedirectToAction("GetUserCart");
         }
         public async Task<IActionResult> GetUserCart()
         {
-            var cart = await _cartRepo.GetUserCart();
+            var cart = await _cartRepo.GetUserCart(User.Identity.Name);
             return View(cart);
         }
 

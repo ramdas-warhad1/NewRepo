@@ -7,17 +7,18 @@ namespace Data.Repositories
     public class CartRepository : ICartRepository
     {
         private readonly ApplicationDbContext _db;
-       // private readonly UserManager<IdentityUser> _userManager;
-       // private readonly                       _httpContextAccessor;
+        private readonly IUserRepository _userRepository;
 
-        public CartRepository(ApplicationDbContext db)
+        public CartRepository(ApplicationDbContext db, IUserRepository userRepository)
         {
             _db = db;
-           // _httpContextAccessor = httpContextAccessor;
+            _userRepository=userRepository;
+
+
         }
-        public async Task<int> AddItem(int ProductId, int qty)
+        public async Task<int> AddItem(int ProductId, int qty, string user =null)
         {
-            string userId = GetUserId();
+            var userId = await GetUserId(user);
             using var transaction = _db.Database.BeginTransaction();
             try
             {
@@ -63,10 +64,10 @@ namespace Data.Repositories
         }
 
 
-        public async Task<int> RemoveItem(int ProductId)
+        public async Task<int> RemoveItem(int ProductId, string user)
         {
             //using var transaction = _db.Database.BeginTransaction();
-            string userId = GetUserId();
+            var userId = await GetUserId(user);
             try
             {
                 if (string.IsNullOrEmpty(userId))
@@ -93,9 +94,9 @@ namespace Data.Repositories
             return cartItemCount;
         }
 
-        public async Task<ShoppingCart> GetUserCart()
+        public async Task<ShoppingCart> GetUserCart(string user)
         {
-            var userId = GetUserId();
+            var userId = await GetUserId(user);
             if (userId == null)
                 throw new InvalidOperationException("Invalid userid");
             var shoppingCart = await _db.ShoppingCarts
@@ -118,7 +119,7 @@ namespace Data.Repositories
         {
             if (string.IsNullOrEmpty(userId)) // updated line
             {
-                userId = GetUserId();
+                userId = await GetUserId(userId);
             }
             var data = await (from cart in _db.ShoppingCarts
                               join cartDetail in _db.CartDetails
@@ -129,9 +130,11 @@ namespace Data.Repositories
             return data.Count;
         }
 
-        private string GetUserId()
+        private async Task<string> GetUserId(string user)
         {
-            return "1";
+
+           
+              return  Convert.ToString(_userRepository.FindByNameAsync(user).Result.Id);
         }
 
         public async Task<bool> DoCheckout(CheckoutModel model)
@@ -161,7 +164,6 @@ namespace Data.Repositories
                     Name=model.Name,
                     Email=model.Email,
                     MobileNumber=model.MobileNumber,
-                    PaymentMethod=model.PaymentMethod,
                     Address=model.Address,
                     IsPaid=false,
                     OrderStatusId = pendingRecord.Id

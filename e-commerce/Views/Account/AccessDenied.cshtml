@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>You do not have permission to access this page.</p>
+
+@if (ViewData["ReturnUrl"] != null)
+{
+    <p>You were trying to access: <strong>@ViewData["ReturnUrl"]</strong></p>
+    <p><a href="@ViewData["ReturnUrl"]">Click here to try again.</a></p>
+}
+else
+{
+    <p><a href="@Url.Action("Index", "Home")">Go to the home page</a></p>
+}

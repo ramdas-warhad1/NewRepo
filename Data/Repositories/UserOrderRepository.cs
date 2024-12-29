@@ -1,4 +1,5 @@
-﻿using Data.DTOs;
+﻿using System.Security.Claims;
+using Data.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,15 +8,12 @@ namespace Data.Repositories
     public class UserOrderRepository : IUserOrderRepository
     {
         private readonly ApplicationDbContext _db;
-       // private readonly IHttpContextAccessor _httpContextAccessor;
-     
-
-
-        public UserOrderRepository(ApplicationDbContext db)
+        private readonly IUserRepository _userRepository;
+       
+        public UserOrderRepository(ApplicationDbContext db, IUserRepository userRepository)
         {
             _db = db;
-           // _httpContextAccessor = httpContextAccessor;
-            
+            _userRepository = userRepository;
         }
 
         public async Task ChangeOrderStatus(UpdateOrderStatusModel data)
@@ -50,7 +48,7 @@ namespace Data.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Order>> UserOrders(bool getAll = false)
+        public async Task<IEnumerable<Order>> UserOrders(bool getAll = false, string userId=null)
         {
             var orders = _db.Orders
                            .Include(x => x.OrderStatus)
@@ -59,20 +57,16 @@ namespace Data.Repositories
                            .AsQueryable();
             if (!getAll)
             {
-                var userId = GetUserId();
-                if (string.IsNullOrEmpty(userId))
+             var user= _userRepository.FindByNameAsync(userId);
+
+
+                if (string.IsNullOrEmpty(Convert.ToString(user)))
                     throw new Exception("User is not logged-in");
-                orders = orders.Where(a => a.UserId == userId);
+                orders = orders.Where(a => a.UserId ==Convert.ToString(user.Id));
                 return await orders.ToListAsync();
             }
 
             return await orders.ToListAsync();
-        }
-
-        private string GetUserId()
-        {
-          
-            return "1";
         }
     }
 }

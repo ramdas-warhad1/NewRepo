@@ -19,6 +19,17 @@ namespace Data
 
         public DbSet<OrderStatus> orderStatuses { get; set; }
         public DbSet<Stock> Stocks { get; set; }
+        public DbSet<User> users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Ensure the UserName is unique
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.UserName)
+                .IsUnique(); // This makes the UserName field unique in the database
+        }
 
     }
 }

@@ -18,6 +18,5 @@ public class CheckoutModel
     [MaxLength(200)]
     public string? Address { get; set; }
 
-    [Required]
-    public string? PaymentMethod { get; set; }
+   
 }

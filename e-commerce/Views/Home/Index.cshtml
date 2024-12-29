@@ -48,29 +48,44 @@
 
 @section Scripts {
     <script>
+       debugger;
         async function add(productId) {
-             var usernameEl = document.getElementById("username");
-        if(usernameEl==null){
-            window.location.href = "/Identity/Account/Login";
-          //var username=usernameEl.innerText;
-          //  if(username.length<1){
-          //      window.location.href="/Identity/Account/Login";
-          //  }
-        }
-            try {
-                var response = await fetch(`/Cart/AddItem?productId=${productId}`);
-                if (response.status == 200) {
-                    var result = await response.json();
-                    var cartCountEl = document.getElementById("cartCount");
-                    cartCountEl.innerHTML = result;
-                    window.location.href = "#cartCount";
-                }
+            if (!productId) {
+                console.error("Product ID is not valid.");
+                return;
             }
-            catch (err) {
-                console.log(err);
+
+            try {
+                // Send the request to the server to add the item to the cart
+                var response = await fetch(`/Cart/AddItem?productId=${productId}`);
+
+                // Check if the response status is successful (2xx)
+                if (response.ok) {
+                    // Get the result from the response (assuming it's a JSON)
+                    var result = await response.json();
+
+                    // Ensure the element exists before trying to update it
+                    var cartCountEl = document.getElementById("cartCount");
+                    if (cartCountEl) {
+                        // Update the cart count on the page
+                        cartCountEl.innerHTML = result.cartCount; // Assuming result has cartCount
+                    } else {
+                        console.error("Cart count element not found on the page.");
+                    }
+
+                    // Optionally redirect after the action has completed
+                    window.location.href = "#cartCount";
+                } else {
+                    // Handle non-200 responses
+                    console.error("Failed to add item to cart. Status: " + response.status);
+                }
+            } catch (err) {
+                // Handle any network or unexpected errors
+                console.error("An error occurred:", err);
             }
         }
     </script>
+
 
     }
 

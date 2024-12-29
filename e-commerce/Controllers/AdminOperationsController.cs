@@ -2,9 +2,12 @@
 using Data.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace e_commerce.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminOperationsController : Controller
     {
         private readonly IUserOrderRepository _userOrderRepository;
@@ -15,7 +18,13 @@ namespace e_commerce.Controllers
 
         public async Task<IActionResult> AllOrders()
         {
-            var orders = await _userOrderRepository.UserOrders(true);
+            if (User.Identity.IsAuthenticated)
+            {
+                var userName = User.Identity.Name;  
+                var role = User.FindFirst(ClaimTypes.Name)?.Value; 
+            }
+            var orders = await _userOrderRepository.UserOrders(true,
+                User.Identity.Name);
             return View(orders);
         }
 

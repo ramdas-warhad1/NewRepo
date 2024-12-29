@@ -26,9 +26,7 @@ namespace Data
         [Required]
         [MaxLength(200)]
         public string? Address { get; set; }
-        [Required]
-        [MaxLength(30)]
-        public string? PaymentMethod { get; set; }
+        
         public bool IsPaid { get; set; }
 
         public OrderStatus OrderStatus { get; set; }
