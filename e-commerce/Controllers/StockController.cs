@@ -41,11 +41,9 @@ namespace e_commerce.Controllers
             try
             {
                 await _stockRepo.ManageStock(stock);
-                TempData["successMessage"] = "Stock is updated successfully.";
             }
             catch (Exception ex)
             {
-                TempData["errorMessage"] = "Something went wrong!!";
             }
 
             return RedirectToAction(nameof(Index));

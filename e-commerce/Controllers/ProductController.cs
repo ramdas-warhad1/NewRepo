@@ -48,22 +48,21 @@ namespace e_commerce.Controllers
                     Price = productToAdd.Price
                 };
                 await _prodkRepo.AddProduct(product);
-                TempData["successMessage"] = "Product is added successfully";
                 return RedirectToAction(nameof(Index));
             }
             catch (InvalidOperationException ex)
             {
-                TempData["errorMessage"] = ex.Message;
+                
                 return View(productToAdd);
             }
             catch (FileNotFoundException ex)
             {
-                TempData["errorMessage"] = ex.Message;
+               
                 return View(productToAdd);
             }
             catch (Exception ex)
             {
-                TempData["errorMessage"] = "Error on saving data";
+                
                 return View(productToAdd);
             }
         }
@@ -73,8 +72,8 @@ namespace e_commerce.Controllers
             var product = await _prodkRepo.GetProductById(id);
             if (product == null)
             {
-                TempData["errorMessage"] = $"Product with the id: {id} does not found";
-                return RedirectToAction(nameof(Index));
+               
+                return RedirectToAction(nameof(Index), product);
             }
 
             ProductDTO ToUpdate = new()
@@ -104,22 +103,22 @@ namespace e_commerce.Controllers
                 };
                 await _prodkRepo.UpdateProduct(product);
 
-                TempData["successMessage"] = "Product is updated successfully";
+               
                 return RedirectToAction(nameof(Index));
             }
             catch (InvalidOperationException ex)
             {
-                TempData["errorMessage"] = ex.Message;
+               
                 return View(prodToUpdate);
             }
             catch (FileNotFoundException ex)
             {
-                TempData["errorMessage"] = ex.Message;
+              
                 return View(prodToUpdate);
             }
             catch (Exception ex)
             {
-                TempData["errorMessage"] = "Error on saving data";
+               
                 return View(prodToUpdate);
             }
         }
@@ -131,7 +130,7 @@ namespace e_commerce.Controllers
                 var product = await _prodkRepo.GetProductById(id);
                 if (product == null)
                 {
-                    TempData["errorMessage"] = $"Product with the id: {id} does not found";
+                    return RedirectToAction(nameof(Index), product);
                 }
                 else
                 {
@@ -140,15 +139,15 @@ namespace e_commerce.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                TempData["errorMessage"] = ex.Message;
+               
             }
             catch (FileNotFoundException ex)
             {
-                TempData["errorMessage"] = ex.Message;
+               
             }
             catch (Exception ex)
             {
-                TempData["errorMessage"] = "Error on deleting the data";
+               
             }
             return RedirectToAction(nameof(Index));
         }

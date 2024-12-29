@@ -39,7 +39,7 @@ namespace ProductShoppingCartMvcUI.Repositories
         }
 
         public async Task<Product?> GetProductById(int id) => await _context.Products.FindAsync(id);
-      
+
         public async Task<IEnumerable<Product>> GetProducts() => await _context.Products.ToListAsync();
 
 

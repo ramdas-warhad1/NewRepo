@@ -75,13 +75,12 @@ namespace e_commerce.Controllers
 
                     return View(data);
                 }
-                await _userOrderRepository.ChangeOrderStatus(data);
-                TempData["msg"] = "Updated successfully";
+                await _userOrderRepository.ChangeOrderStatus(data);                
             }
             catch (Exception ex)
             {
                 // catch exception here
-                TempData["msg"] = "Something went wrong";
+               
             }
             return RedirectToAction(nameof(UpdateOrderStatus), new { orderId = data.OrderId });
         }
