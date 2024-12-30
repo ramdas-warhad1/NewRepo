@@ -1,0 +1,12 @@
+﻿1. Interface and Implementation are in same class, In some classes it is on top and in some some of the cases its at bottom.(You can consider saperation of code for more readability)
+2. Consider specifying data types for the anonymous objects returned by the LINQ queries for better code clarity and potential performance benefits.
+	ex. public async Task<IEnumerable<TopSellingProductModel>> GetTopNSellingProductsByDate(DateTime startDate, DateTime endDate)(Report Repository.cs)
+3. Use generic repository pattern which used in erlier repo.
+4. In DTO folder maintain consistency while creating classes.
+5. Work on warnings in te project. e.g - Null references
+6. Database entities should add in a folder ex: Entities
+7. Use consistent formatting and indentation to improve code readability.
+8. Use descriptive variable names to improve code clarity.
+9. Remove any unused code
+10. Complete unit test cases for all code.
+s
